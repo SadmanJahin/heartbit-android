@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/13343/AndroidStudioProjects/Heartbit/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/13343/AndroidStudioProjects/Heartbit/app/src/main/res/drawable/gradient.xml" value="0.1805" />
+        <entry key="..\:/Users/13343/AndroidStudioProjects/Heartbit/app/src/main/res/drawable/roundedbutton.xml" value="0.1805" />
+        <entry key="..\:/Users/13343/AndroidStudioProjects/Heartbit/app/src/main/res/layout/activity_main.xml" value="0.22" />
       </map>
     </option>
   </component>
