@@ -2,6 +2,7 @@ package com.example.heartbit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -69,17 +70,24 @@ public class MainActivity extends AppCompatActivity {
         recorder_timer=findViewById(R.id.record_timer);
         recordBtn=findViewById(R.id.start_btn);
 
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PackageManager.PERMISSION_GRANTED);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
-        recorder= new Recorder();
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO,Manifest.permission.INTERNET};
 
 
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+
+        startThread();
+
+
+    }
+
+    public void startThread()
+    {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 //threadLoop();
-               recorder.recordWavStart();
+                recorder.recordWavStart();
             }
         });
     }
@@ -99,9 +107,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public void start_recording()
     {
+        startThread();
         recordBtn.setText("\uf0c8");
         isActive = true;
         start_Timer();
+        recorder= new Recorder();
         thread.start();
     }
     public void stopRecording() {
@@ -111,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
         recorder_timer.setText("Recording Stopped.Tap Send for result.");
         saved_audio_name=recorder.recordWavStop();
 
+
+
     }
     public void buttonSend(View view) {
+        status.setText("Analyzing:");
         UploadFileAsync.audio_name=saved_audio_name;
         new UploadFileAsync().execute("saved_audio_name");
         T=new Timer();
@@ -125,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        if(wait_for_server>=3)
+                        if(wait_for_server>=6)
                         {
                             status.setText("Your Heart condition is "+UploadFileAsync.status);
                         }
@@ -178,7 +191,8 @@ class UploadFileAsync extends AsyncTask<String, Void, String> {
 
         try {
 
-            String sourceFileUri = Environment.getExternalStorageDirectory() + File.separator + "AudioRecord/"+audio_name+".wav";;
+            String sourceFileUri = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS) + File.separator + "AudioRecord/"+audio_name+".wav";
 
             HttpURLConnection conn = null;
             DataOutputStream dos = null;

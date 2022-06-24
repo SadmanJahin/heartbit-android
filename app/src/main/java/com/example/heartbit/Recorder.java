@@ -32,7 +32,8 @@ public class Recorder {
     private short[] mBuffer;
     private String audioFilePath;
     private boolean mIsRecording = false;
-    private String RECORD_WAV_PATH = Environment.getExternalStorageDirectory() + File.separator + "AudioRecord";
+    private String RECORD_WAV_PATH = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_DOWNLOADS) + File.separator + "AudioRecord";
 
     /* Initializing AudioRecording MIC */
     public Recorder() {
